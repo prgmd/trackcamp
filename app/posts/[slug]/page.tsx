@@ -3,8 +3,8 @@ import path from "path";
 import matter from "gray-matter";
 import { remark } from "remark";
 import html from "remark-html";
+import gfm from "remark-gfm";
 import { notFound } from "next/navigation";
-import React from "react"; // React.CSSProperties를 위해 추가
 
 // 이 부분은 문제가 없으며 아주 잘 작성하셨습니다.
 export async function generateStaticParams() {
@@ -26,31 +26,33 @@ export default async function PostPage(props: any) {
 
   const fileContent = fs.readFileSync(filePath, "utf-8");
   const { data, content } = matter(fileContent);
-  const processedContent = await remark().use(html).process(content);
+  const processedContent = await remark().use(gfm).use(html).process(content);
   const contentHtml = processedContent.toString();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#111] text-white py-16 px-4">
-      <article className="w-full max-w-xl">
-        <h1 className="text-3xl font-bold mb-2">{data.title}</h1>
-        <div className="text-sm text-white/60 mb-8">{data.date}</div>
+    <div className="min-h-screen bg-[#111] text-white py-16 px-4">
+      <article className="max-w-4xl mx-auto">
+        <header className="mb-8">
+          <h1 className="text-4xl font-bold mb-2">{data.title}</h1>
+          <div className="text-sm text-white/60">{data.date}</div>
+        </header>
         <div 
-          className="prose prose-invert text-justify" 
-          style={{
-            fontFamily: `'Apple SD Gothic Neo', sans-serif`,
-            '--tw-prose-sub': '#aaa',
-            '--tw-prose-sub-size': '0.85em',
-            '--tw-prose-sub-align': 'center',
-          } as React.CSSProperties} 
+          className="prose prose-invert prose-lg max-w-none text-justify
+                     prose-headings:text-white prose-p:text-white/90 prose-p:mb-8
+                     prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+                     prose-strong:text-white prose-em:text-white/80
+                     prose-blockquote:border-l-blue-400 prose-blockquote:bg-white/5
+                     prose-code:text-green-400 prose-pre:bg-gray-800
+                     prose-li:text-white/90 prose-ol:text-white/90 prose-ul:text-white/90"
           dangerouslySetInnerHTML={{ __html: contentHtml }} 
         />
-        <style>{`
-          .prose sub, .prose-invert sub {
-            color: #aaa !important;
-            display: block;
-            text-align: center;
-            font-size: 0.85em;
-            margin-top: 0.5em;
+        <style jsx>{`
+          .prose p {
+            margin-bottom: 2rem !important;
+            line-height: 1.8;
+          }
+          .prose p:last-child {
+            margin-bottom: 0 !important;
           }
         `}</style>
       </article>
