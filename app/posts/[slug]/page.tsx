@@ -14,8 +14,8 @@ export async function generateStaticParams() {
 }
 
 // PostPage 컴포넌트 수정
-export default async function PostPage({ params }: { params: { slug: string } }) {
-  // await를 제거하고 params에서 slug를 직접 구조 분해 할당합니다.
+export default async function PostPage(props: any) {
+  const { params } = await props;
   const { slug } = params;
 
   const filePath = path.join(process.cwd(), "posts", `${slug}.md`);
