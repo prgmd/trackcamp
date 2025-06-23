@@ -26,6 +26,7 @@ export default async function PostPage({ params }: { params: { slug: string } })
         <h1 className="text-3xl font-bold mb-2">{data.title}</h1>
         <div className="text-sm text-white/60 mb-8">{data.date}</div>
         <div className="prose prose-invert text-justify" style={{
+          fontFamily: `'Apple SD Gothic Neo', sans-serif`,
           '--tw-prose-sub': '#aaa',
           '--tw-prose-sub-size': '0.85em',
           '--tw-prose-sub-align': 'center',
